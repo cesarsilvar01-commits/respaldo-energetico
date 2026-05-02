@@ -1,0 +1,1466 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diseñador de Respaldo Energético | Voltinela</title>
+<link rel="icon" type="image/x-icon" href="assets/isotipo-voltinela.ico">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f0f0f0;color:#1a202c}
+
+.header{background:linear-gradient(160deg,#ffffff 0%,#f0f7e0 40%,#c8e87a 75%,#81bc00 100%);color:#1a202c;padding:44px 24px 36px;text-align:center}
+.header-logo{display:block;margin:0 auto -30px;height:288px;width:auto;object-fit:contain}
+.header h1{font-size:clamp(1.4rem,4vw,2.2rem);font-weight:800;letter-spacing:-.5px;color:#1e293b}
+.header p{margin-top:8px;opacity:.75;font-size:.95rem;max-width:600px;margin-inline:auto;color:#374151}
+.badge{display:inline-block;background:rgba(0,0,0,.07);border:1px solid rgba(0,0,0,.12);border-radius:20px;padding:4px 14px;font-size:.78rem;margin-top:12px;letter-spacing:.5px;color:#3a5200}
+
+.container{max-width:1140px;margin:0 auto;padding:24px 16px}
+
+/* STEPS */
+.steps{display:flex;justify-content:center;gap:0;margin-bottom:28px;flex-wrap:wrap}
+.step{display:flex;align-items:center;gap:8px;font-size:.82rem;font-weight:600;color:#94a3b8}
+.step.active{color:#81bc00}.step.done{color:#81bc00}
+.step-num{width:28px;height:28px;border-radius:50%;border:2px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:.78rem;flex-shrink:0}
+.step-line{width:32px;height:2px;background:#e0e0e0;margin:0 2px}
+.step.done .step-num{background:#81bc00;border-color:#81bc00;color:#fff}
+.step.active .step-num{background:#81bc00;border-color:#81bc00;color:#fff}
+
+/* CARDS */
+.section-card{background:#fff;border-radius:16px;box-shadow:0 1px 4px rgba(0,0,0,.08);padding:24px;margin-bottom:20px}
+.section-title{font-size:1.05rem;font-weight:700;color:#1e293b;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.section-sub{font-size:.84rem;color:#64748b;margin-bottom:18px}
+
+/* PRESETS */
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.preset-btn{padding:7px 14px;border:2px solid #e0e0e0;border-radius:20px;background:#fff;cursor:pointer;font-size:.82rem;font-weight:600;color:#475569;transition:all .2s}
+.preset-btn:hover,.preset-btn.active{border-color:#81bc00;background:#eef8d0;color:#4a6900}
+
+/* APPLIANCES */
+.cat-label{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#94a3b8;margin:16px 0 8px;padding-left:2px}
+.appliance-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:10px}
+.app-card{border:2px solid #e0e0e0;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;transition:all .2s;cursor:pointer;background:#fff}
+.app-card:hover{border-color:#81bc00;background:#f5fce8}
+.app-card.selected{border-color:#81bc00;background:#eef8d0}
+.app-card.critical-selected{border-color:#f59e0b;background:#fffbeb}
+.app-icon{font-size:1.5rem;flex-shrink:0;width:34px;text-align:center}
+.app-info{flex:1;min-width:0}
+.app-name{font-size:.83rem;font-weight:600;color:#1e293b;line-height:1.2}
+.app-watts{font-size:.73rem;color:#64748b;margin-top:2px}
+.app-controls{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+.qty-input{width:50px;padding:4px 6px;border:1px solid #cbd5e1;border-radius:6px;font-size:.82rem;text-align:center;background:#fff}
+.critical-toggle{font-size:.63rem;color:#f59e0b;font-weight:700;cursor:pointer;border:1px solid #f59e0b;border-radius:10px;padding:2px 6px;white-space:nowrap;background:#fff}
+.critical-toggle.on{background:#f59e0b;color:#fff}
+
+/* ── KIT RECOMMENDATION SECTION ── */
+#kitSection{display:none;margin-bottom:20px}
+.kit-header{background:linear-gradient(135deg,#3a5200,#81bc00);color:#fff;border-radius:14px 14px 0 0;padding:16px 20px}
+.kit-header h3{font-size:1rem;font-weight:800}
+.kit-header p{font-size:.82rem;opacity:.9;margin-top:3px}
+.kits-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;padding:16px;background:#f7f7f7;border-radius:0 0 14px 14px;border:1px solid #e0e0e0;border-top:none}
+.kit-card{background:#fff;border-radius:12px;border:2px solid #e0e0e0;overflow:hidden;transition:all .2s;position:relative}
+.kit-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.1)}
+.kit-card-head{padding:14px 16px 10px;color:#fff;position:relative}
+.kit-badge{position:absolute;top:10px;right:10px;background:rgba(255,255,255,.25);border-radius:10px;padding:2px 8px;font-size:.68rem;font-weight:700}
+.kit-name{font-size:.95rem;font-weight:800;margin-bottom:2px}
+.kit-range{font-size:.75rem;opacity:.85}
+.kit-body{padding:12px 16px}
+.kit-item{display:flex;gap:8px;margin-bottom:7px;align-items:flex-start}
+.kit-item-icon{font-size:.9rem;flex-shrink:0;margin-top:1px}
+.kit-item-text{font-size:.8rem;color:#374151;line-height:1.35}
+.kit-item-text strong{color:#1e293b}
+.kit-price{font-size:1.2rem;font-weight:800;margin-top:8px;padding-top:8px;border-top:1px solid #ebebeb}
+.kit-price span{font-size:.75rem;font-weight:500;color:#64748b}
+.kit-note{margin-top:6px;font-size:.72rem;color:#f59e0b;font-weight:600;background:#fffbeb;border-radius:6px;padding:5px 8px}
+
+/* CONFIG */
+.config-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.config-group label{display:block;font-size:.82rem;font-weight:600;color:#374151;margin-bottom:6px}
+.config-group select,.config-group input[type=range]{width:100%;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;font-size:.88rem;background:#fff}
+.config-group input[type=range]{padding:4px 0}
+#cfgAuto{accent-color:#2d5a00}
+.range-val{font-size:.9rem;font-weight:700;color:#81bc00;margin-top:4px;text-align:center}
+.install-toggle{display:flex;align-items:center;gap:10px;margin-top:4px;cursor:pointer}
+.install-toggle input[type=checkbox]{width:18px;height:18px;accent-color:#81bc00;cursor:pointer}
+.install-toggle span{font-size:.85rem;color:#374151;font-weight:500}
+
+/* PASSWORD GATE */
+#passGate{position:fixed;inset:0;background:linear-gradient(160deg,#ffffff 0%,#f0f7e0 40%,#c8e87a 75%,#81bc00 100%);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px}
+.pass-box{background:#fff;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.18);padding:40px 36px;max-width:400px;width:100%;text-align:center}
+.pass-logo{height:90px;width:auto;margin-bottom:20px}
+.pass-box h2{font-size:1.25rem;font-weight:800;color:#1e293b;margin-bottom:6px}
+.pass-box p{font-size:.85rem;color:#64748b;margin-bottom:24px;line-height:1.5}
+.pass-input{width:100%;padding:12px 16px;border:2px solid #cbd5e1;border-radius:10px;font-size:1.2rem;text-align:center;letter-spacing:8px;outline:none;transition:border .2s;font-weight:700}
+.pass-input:focus{border-color:#81bc00}
+.pass-input.error{border-color:#dc2626;animation:shake .3s}
+.pass-btn{margin-top:14px;width:100%;padding:13px;background:linear-gradient(135deg,#81bc00,#6a9e00);color:#fff;border:none;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;transition:all .2s}
+.pass-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(129,188,0,.4)}
+.pass-error{color:#dc2626;font-size:.82rem;font-weight:600;margin-top:10px;min-height:18px}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* TOGGLE APPLIANCES */
+.toggle-apps-btn{display:flex;align-items:center;gap:8px;width:100%;padding:10px 14px;background:#f1f5f9;border:2px dashed #cbd5e1;border-radius:10px;cursor:pointer;font-size:.84rem;font-weight:600;color:#475569;transition:all .2s;margin-bottom:4px}
+.toggle-apps-btn:hover{background:#eef8d0;border-color:#81bc00;color:#3a5200}
+.toggle-apps-btn .toggle-arrow{margin-left:auto;font-size:.8rem;transition:transform .25s}
+.toggle-apps-btn.open .toggle-arrow{transform:rotate(180deg)}
+
+/* PRICE BOXES */
+.price-note{background:#eef8d0;border-radius:8px;padding:8px 12px;font-size:.78rem;color:#3a5200;margin-top:6px;font-weight:600;border-left:3px solid #81bc00}
+
+/* CALCULATE */
+.calc-wrap{text-align:center;margin:24px 0}
+.calc-btn{padding:16px 52px;background:linear-gradient(135deg,#81bc00,#6a9e00);color:#fff;border:none;border-radius:12px;font-size:1.05rem;font-weight:700;cursor:pointer;box-shadow:0 4px 15px rgba(129,188,0,.35);transition:all .2s;letter-spacing:.3px}
+.calc-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(129,188,0,.45)}
+
+/* RESULTS */
+#results{display:none}
+.brand-banner{border-radius:12px;padding:18px 22px;margin-bottom:20px;display:flex;align-items:center;gap:16px}
+.brand-must{background:linear-gradient(135deg,#065f46,#059669);color:#fff}
+.brand-victron{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff}
+.brand-growatt{background:linear-gradient(135deg,#0a0a0a 0%,#1a1a1a 50%,#3a5200 80%,#81bc00 100%);color:#fff}
+.brand-bolt{background:linear-gradient(135deg,#0a0a0a 0%,#1a1a1a 50%,#7f1d1d 80%,#dc2626 100%);color:#fff}
+.brand-banner .b-icon{font-size:2.2rem}
+.brand-banner h2{font-size:1.15rem;font-weight:800}
+.brand-banner p{font-size:.84rem;opacity:.9;margin-top:3px}
+
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px;margin-bottom:20px}
+.kpi{background:#fff;border-radius:12px;padding:14px;box-shadow:0 1px 4px rgba(0,0,0,.07);border-left:4px solid}
+.kpi-val{font-size:1.4rem;font-weight:800;line-height:1}
+.kpi-label{font-size:.72rem;color:#64748b;margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.kpi.blue{border-color:#81bc00;color:#81bc00}
+.kpi.green{border-color:#81bc00;color:#81bc00}
+.kpi.amber{border-color:#f59e0b;color:#f59e0b}
+.kpi.purple{border-color:#8b5cf6;color:#8b5cf6}
+.kpi.red{border-color:#ef4444;color:#ef4444}
+.kpi.teal{border-color:#14b8a6;color:#14b8a6}
+.kpi.gray{border-color:#64748b;color:#64748b}
+
+/* BOM TABLE */
+.equip-table{width:100%;border-collapse:collapse;font-size:.84rem}
+.equip-table th{background:#f7f7f7;padding:10px 12px;text-align:left;font-weight:700;color:#374151;border-bottom:2px solid #e0e0e0}
+.equip-table td{padding:10px 12px;border-bottom:1px solid #ebebeb;vertical-align:top}
+.equip-table tr:hover td{background:#f7f7f7}
+.equip-table .total-row td{font-weight:800;background:#eef8d0;color:#3a5200;border-top:2px solid #81bc00}
+.equip-table .install-row td{background:#f0fdf4;color:#065f46;border-top:1px solid #86efac}
+.equip-table .mat-row td{background:#fefce8;color:#713f12;border-top:1px solid #fde047}
+.tag{font-size:.68rem;font-weight:700;padding:2px 7px;border-radius:10px;display:inline-block;margin-top:2px}
+.tag-main{background:#dff0a0;color:#3a5200}
+.tag-acc{background:#f0fdf4;color:#166534}
+.tag-ats{background:#fef3c7;color:#92400e}
+.tag-inst{background:#dcfce7;color:#14532d}
+.tag-mat{background:#fef9c3;color:#713f12}
+
+/* CALCS */
+.calc-block{background:#f7f7f7;border-radius:10px;padding:16px;font-size:.84rem;line-height:1.9}
+.calc-block .formula{font-family:monospace;background:#e0e0e0;padding:2px 6px;border-radius:4px;font-size:.8rem}
+.calc-block .result-line{font-weight:700;color:#81bc00;margin-top:2px}
+
+/* SIMULATOR */
+.sim-slider{flex:1;min-width:200px}
+.sim-output{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.sim-card{background:#f7f7f7;border-radius:10px;padding:12px;text-align:center}
+.sim-val{font-size:1.3rem;font-weight:800;color:#1e293b}
+.sim-lab{font-size:.7rem;color:#64748b;text-transform:uppercase;font-weight:600;letter-spacing:.4px;margin-top:2px}
+
+/* PRODUCT VISUAL CARDS */
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:12px}
+.prod-card{border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.10);border:1px solid #e0e0e0;background:#fff}
+.prod-card-img{height:130px;display:flex;align-items:center;justify-content:center;font-size:4rem;position:relative}
+.prod-card-img .prod-brand-tag{position:absolute;bottom:6px;right:6px;font-size:.65rem;font-weight:800;padding:2px 7px;border-radius:8px;text-transform:uppercase;letter-spacing:.5px}
+.prod-card-body{padding:12px}
+.prod-card-name{font-size:.82rem;font-weight:700;color:#1e293b;line-height:1.3}
+.prod-card-model{font-size:.72rem;color:#64748b;margin-top:2px}
+.prod-card-spec{font-size:.75rem;color:#374151;margin-top:6px;line-height:1.5}
+.prod-card-price{font-size:.9rem;font-weight:800;color:#81bc00;margin-top:8px}
+
+/* DIAGRAM */
+.diagram-wrap{overflow-x:auto;margin-top:12px;display:flex;justify-content:center}
+svg.diagram{width:100%;max-width:460px;min-width:unset;display:block}
+
+/* INSTALL PHOTOS */
+.photos-grid{display:flex;flex-direction:row;overflow-x:auto;gap:14px;margin-top:12px;padding-bottom:12px;scroll-snap-type:x mandatory}
+.photo-card{border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.10);flex-shrink:0;scroll-snap-align:start}
+.photo-placeholder{width:360px;height:640px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative}
+.photo-icon{font-size:2.5rem;opacity:.6}
+.photo-label-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.65));padding:10px;color:#fff;font-size:.75rem;font-weight:600;line-height:1.3}
+.photo-caption{padding:8px 12px;font-size:.76rem;color:#475569;background:#fff;font-weight:500}
+
+/* ALERTS */
+.alert{border-radius:10px;padding:12px 16px;margin-bottom:12px;font-size:.84rem;display:flex;gap:10px;align-items:flex-start}
+.alert-warn{background:#fffbeb;border:1px solid #fcd34d;color:#78350f}
+.alert-ok{background:#f0fdf4;border:1px solid #86efac;color:#14532d}
+.alert-err{background:#fef2f2;border:1px solid #fca5a5;color:#7f1d1d}
+
+/* PDF BUTTON */
+.pdf-wrap{text-align:center;padding:28px 0}
+.pdf-btn{padding:14px 44px;background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;border:none;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 4px 15px rgba(220,38,38,.35);transition:all .2s;letter-spacing:.3px}
+.pdf-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(220,38,38,.45)}
+.pdf-sub{font-size:.78rem;color:#94a3b8;margin-top:8px}
+
+/* HIGHLIGHTED KIT IN RESULTS */
+.recommended-kit{border:2px solid #f59e0b;background:linear-gradient(135deg,#fffbeb,#fef3c7);border-radius:12px;padding:16px 20px;margin-bottom:20px}
+.recommended-kit h3{font-size:.9rem;font-weight:700;color:#92400e;margin-bottom:10px}
+.rec-kit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+
+/* RESPONSIVE — TABLET (≤900px) */
+@media(max-width:900px){
+  .header-logo{height:180px}
+  .kits-grid{grid-template-columns:repeat(2,1fr)}
+  .products-grid{grid-template-columns:repeat(2,1fr)}
+  .kpi-grid{grid-template-columns:repeat(3,1fr)}
+  #twoCol{grid-template-columns:1fr!important}
+  .sim-output{grid-template-columns:repeat(3,1fr)}
+}
+
+/* RESPONSIVE — MÓVIL (≤600px) */
+@media(max-width:600px){
+  .header{padding:20px 12px 18px}
+  .header-logo{height:110px;margin-bottom:2px}
+  .header h1{font-size:1.25rem}
+  .header p{font-size:.82rem}
+  .badge{font-size:.72rem;padding:3px 10px}
+  .container{padding:12px 10px}
+  .section-card{padding:16px 12px;border-radius:12px}
+  .section-title{font-size:.95rem}
+  .steps{gap:2px;margin-bottom:18px}
+  .step-line{width:14px}
+  .step span:not(.step-num){font-size:.72rem}
+  .appliance-grid{grid-template-columns:1fr}
+  .presets{gap:6px}
+  .preset-btn{font-size:.76rem;padding:6px 10px}
+  .kits-grid{grid-template-columns:1fr}
+  .kit-name{font-size:.88rem}
+  .config-row{grid-template-columns:1fr}
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .kpi-val{font-size:1.15rem}
+  #twoCol{grid-template-columns:1fr!important}
+  .brand-banner{flex-direction:column;text-align:center;gap:8px;padding:14px 16px}
+  .brand-banner .b-icon{font-size:1.8rem}
+  .brand-banner h2{font-size:1rem}
+  .products-grid{grid-template-columns:1fr}
+  .calc-btn{width:100%;padding:14px 20px;font-size:.95rem}
+  .sim-output{grid-template-columns:repeat(2,1fr)}
+  .equip-table{font-size:.76rem}
+  .equip-table th,.equip-table td{padding:7px 8px}
+  .photo-placeholder{width:calc(100vw - 48px);height:calc((100vw - 48px) * 16/9)}
+  .photo-placeholder img{width:100%!important;height:100%!important}
+  .rec-kit-grid{grid-template-columns:1fr}
+  .calc-block{font-size:.78rem;padding:12px}
+  svg.diagram{min-width:500px}
+}
+
+/* ── BACK COVER (oculta en pantalla, visible en PDF) ── */
+.pdf-back-cover{display:none}
+
+/* ── PRINT / PDF ── */
+@media print{
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  body{background:#fff!important;font-size:10pt;color:#1a202c}
+
+  /* Ocultar elementos interactivos */
+  #passGate,#step1,#kitSection,.presets,.steps,.calc-wrap,.pdf-wrap,
+  #toggleAppsBtn,#appList,button{display:none!important}
+  #results{display:block!important}
+
+  /* Header mejorado */
+  .header{
+    background:linear-gradient(160deg,#ffffff 0%,#f0f7e0 40%,#c8e87a 75%,#81bc00 100%)!important;
+    padding:20px 32px 16px;page-break-after:avoid;
+    border-bottom:4px solid #81bc00
+  }
+  .header-logo{height:72px;margin-bottom:4px}
+  .header h1{font-size:1.3rem;color:#1e293b}
+  .header p{font-size:.8rem}
+  .badge{background:#eef8d0!important;color:#3a5200!important;border-color:#81bc00!important}
+
+  /* Contenedor */
+  .container{padding:0 8px}
+
+  /* Secciones */
+  .section-card{
+    box-shadow:none!important;border:1px solid #d1d5db;
+    break-inside:avoid;margin-bottom:14px;padding:14px 16px;
+    border-radius:10px
+  }
+  .section-title{
+    font-size:.92rem;color:#1e293b;
+    border-bottom:2px solid #81bc00;padding-bottom:5px;margin-bottom:10px
+  }
+
+  /* Banner resultado */
+  .brand-banner{border-radius:8px;padding:14px 18px;margin-bottom:14px}
+  .brand-banner h2{font-size:1rem}
+
+  /* KPIs */
+  .kpi-grid{grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+  .kpi{padding:10px 12px}
+  .kpi-val{font-size:1.1rem}
+
+  /* Tabla BOM */
+  #twoCol{grid-template-columns:1fr 1fr!important;gap:12px}
+  .equip-table{font-size:.78rem}
+  .equip-table th,.equip-table td{padding:7px 10px}
+
+  /* Equipos */
+  .products-grid{grid-template-columns:repeat(3,1fr);gap:10px}
+  .prod-card-img{height:100px}
+
+  /* Diagrama */
+  .diagram-wrap{justify-content:center;page-break-inside:avoid}
+  svg.diagram{max-width:320px;width:320px}
+
+  /* Fotos instalaciones */
+  .photos-grid{flex-direction:row;flex-wrap:wrap;overflow:visible;gap:10px}
+  .photo-card{break-inside:avoid}
+  .photo-placeholder{width:160px!important;height:285px!important}
+  .photo-placeholder img{width:160px!important;height:285px!important}
+
+  /* Simulador */
+  .sim-output{grid-template-columns:repeat(3,1fr)}
+
+  /* CONTRAPORTADA */
+  .pdf-back-cover{
+    display:flex!important;
+    page-break-before:always;
+    width:100%;height:100vh;
+    align-items:center;justify-content:center;flex-direction:column;
+    background:#fff!important;text-align:center;
+    padding:40px 60px
+  }
+  .pdf-back-cover img{max-height:55vh;max-width:70%;object-fit:contain}
+  .pdf-back-cover .back-tagline{margin-top:32px;font-size:1rem;color:#3a5200;font-weight:700;letter-spacing:.5px}
+  .pdf-back-cover .back-sub{margin-top:8px;font-size:.8rem;color:#64748b}
+  .pdf-back-cover .back-line{width:80px;height:3px;background:#81bc00;margin:20px auto}
+
+  @page{margin:12mm 14mm;size:A4}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ PASSWORD GATE ══ -->
+<div id="passGate">
+  <div class="pass-box">
+    <img src="assets/logo-horizontal-letras-grises.png" alt="Voltinela Eco Energy" class="pass-logo">
+    <h2>🔒 Acceso Restringido</h2>
+    <p>Esta herramienta es de uso exclusivo de<br><strong>Voltinela Eco Energy</strong>.<br>Ingresa tus datos para continuar.</p>
+    <input type="text" class="pass-input" id="userInput" placeholder="Tu nombre" maxlength="40"
+      style="letter-spacing:normal;margin-bottom:10px;font-size:.95rem"
+      onkeydown="if(event.key==='Enter')document.getElementById('passInput').focus()">
+    <input type="password" class="pass-input" id="passInput" placeholder="••••" maxlength="10"
+      onkeydown="if(event.key==='Enter')checkPass()">
+    <div class="pass-error" id="passError"></div>
+    <button class="pass-btn" onclick="checkPass()">Ingresar →</button>
+  </div>
+</div>
+
+<div class="header">
+  <img src="assets/logo-horizontal-letras-grises.png" alt="Voltinela Eco Energy" class="header-logo">
+  <h1>⚡ Diseñador de Respaldo Energético</h1>
+  <p>Selecciona tus cargas, elige tu kit ideal y obtén la solución completa con precios reales del catálogo</p>
+  <span class="badge">MUST · Victron Energy · Growatt · BSL BATT · Voltinela</span>
+</div>
+
+<div class="container">
+
+<div class="steps">
+  <div class="step active" id="s1"><div class="step-num">1</div><span>Cargas</span></div>
+  <div class="step-line"></div>
+  <div class="step" id="s2"><div class="step-num">2</div><span>Kits</span></div>
+  <div class="step-line"></div>
+  <div class="step" id="s3"><div class="step-num">3</div><span>Config</span></div>
+  <div class="step-line"></div>
+  <div class="step" id="s4"><div class="step-num">4</div><span>Solución</span></div>
+</div>
+
+<!-- ══ STEP 1: LOADS ══ -->
+<div id="step1">
+<div class="section-card">
+  <div class="section-title">🏠 ¿Qué equipos necesitas respaldar?</div>
+  <div class="section-sub">Selecciona cada equipo, ajusta la cantidad y marca los <strong>críticos</strong> (los que NO pueden apagarse durante un corte de luz).</div>
+  <div class="presets">
+    <span style="font-size:.82rem;font-weight:600;color:#64748b;align-self:center;margin-right:4px">Selección rápida:</span>
+    <button class="preset-btn" onclick="applyPreset('hogar',this)">🏠 Hogar básico</button>
+    <button class="preset-btn" onclick="applyPreset('oficina',this)">💼 Oficina</button>
+    <button class="preset-btn" onclick="applyPreset('comercio',this)">🏪 Comercio</button>
+    <button class="preset-btn" onclick="applyPreset('server',this)">🖧 Sala servidores</button>
+    <button class="preset-btn" onclick="clearAll(this)">✕ Limpiar todo</button>
+  </div>
+  <button class="toggle-apps-btn" id="toggleAppsBtn" onclick="toggleAppList()">
+    <span>📋 Mostrar / ocultar lista de equipos</span>
+    <span class="toggle-arrow">▼</span>
+  </button>
+  <div id="appList" style="display:none"></div>
+</div>
+
+<!-- KIT RECOMMENDATIONS (visible when hogar preset selected) -->
+<div id="kitSection">
+  <div class="kit-header">
+    <h3 id="kitTitle">🎁 Kits Recomendados</h3>
+    <p id="kitSubtitle">Selecciona el kit que mejor se adapte a tu presupuesto y necesidades</p>
+  </div>
+  <div class="kits-grid" id="kitsGrid"></div>
+</div>
+
+<!-- STEP 2: CONFIG -->
+<div class="section-card">
+  <div class="section-title">⚙️ Configuración del sistema</div>
+  <div class="section-sub">Define la instalación eléctrica, autonomía deseada y opciones adicionales.</div>
+  <div class="config-row">
+    <div class="config-group">
+      <label>Tipo de instalación eléctrica</label>
+      <select id="cfgPhase" onchange="maybeUpdateKits()">
+        <option value="1">Monofásica 120V</option>
+        <option value="2" selected>Bifásica / Split-phase 120/240V</option>
+        <option value="3">Trifásica 208/480V</option>
+      </select>
+    </div>
+    <div class="config-group">
+      <label>Autonomía deseada: <span id="autoVal" style="color:#81bc00;font-weight:800">4 horas</span></label>
+      <input type="range" id="cfgAuto" min="4" max="16" step="4" value="4"
+        oninput="document.getElementById('autoVal').textContent=this.value+' horas'">
+    </div>
+    <div class="config-group">
+      <label>¿Incluir preparación solar?</label>
+      <select id="cfgSolar">
+        <option value="no">No, solo red eléctrica</option>
+        <option value="yes">Sí, preparar para solar futuro</option>
+      </select>
+    </div>
+    <div class="config-group">
+      <label>📏 Distancia al tablero eléctrico</label>
+      <select id="cfgDist">
+        <option value="short">Menos de 5 metros — $85</option>
+        <option value="medium">Entre 5 y 10 metros — $165</option>
+        <option value="long">Más de 10 metros — $280</option>
+      </select>
+      <div class="price-note" id="matNote">Incluye cable, terminales, conectores y accesorios de instalación</div>
+    </div>
+    <div class="config-group">
+      <label>🔧 Instalación por técnico Voltinela</label>
+      <label class="install-toggle">
+        <input type="checkbox" id="cfgInstall" onchange="updateInstallNote()">
+        <span>Sí, incluir instalación en el presupuesto</span>
+      </label>
+      <div class="price-note" id="installNote" style="display:none">El precio varía según el inversor seleccionado</div>
+    </div>
+  </div>
+</div>
+
+<div class="calc-wrap">
+  <button class="calc-btn" onclick="calculate()">⚡ Calcular Sistema de Respaldo Completo</button>
+</div>
+</div><!-- /step1 -->
+
+<!-- ══ RESULTS ══ -->
+<div id="results">
+
+  <div id="brandBanner"></div>
+  <div id="alerts"></div>
+
+  <!-- KPI -->
+  <div class="kpi-grid" id="kpiGrid"></div>
+
+  <!-- 2-COL: BOM + CALCS -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px" id="twoCol">
+    <div class="section-card" style="margin:0">
+      <div class="section-title">🛒 Equipos y Presupuesto</div>
+      <table class="equip-table">
+        <thead><tr><th>Equipo / Servicio</th><th>Cant.</th><th>Precio u.</th><th>Total</th></tr></thead>
+        <tbody id="equipBody"></tbody>
+      </table>
+    </div>
+    <div class="section-card" style="margin:0">
+      <div class="section-title">🧮 Cálculos Detallados</div>
+      <div class="calc-block" id="calcDetail"></div>
+    </div>
+  </div>
+
+  <!-- SIMULATOR -->
+  <div class="section-card">
+    <div class="section-title">🔋 Simulador de Autonomía Interactivo</div>
+    <div class="section-sub">Mueve el slider para ver cuánto duran las baterías según cuánta carga tengas encendida.</div>
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <span style="font-size:.85rem;font-weight:600;white-space:nowrap">% de carga activa:</span>
+      <input type="range" class="sim-slider" id="simLoad" min="10" max="100" value="100" oninput="updateSim()" style="flex:1;min-width:200px">
+      <span id="simPct" style="font-size:1.1rem;font-weight:800;color:#81bc00;min-width:46px">100%</span>
+    </div>
+    <div class="sim-output">
+      <div class="sim-card"><div class="sim-val" id="simW">—</div><div class="sim-lab">Watts activos</div></div>
+      <div class="sim-card"><div class="sim-val" id="simH">—</div><div class="sim-lab">Autonomía estimada</div></div>
+      <div class="sim-card"><div class="sim-val" id="simA">—</div><div class="sim-lab">Corriente DC (A @ 48V)</div></div>
+    </div>
+  </div>
+
+  <!-- PRODUCT VISUAL CARDS -->
+  <div class="section-card">
+    <div class="section-title">📦 Equipos del Sistema — Vista de Productos</div>
+    <div class="section-sub">Representación visual de los equipos que forman tu sistema de respaldo.</div>
+    <div class="products-grid" id="productsGrid"></div>
+  </div>
+
+  <!-- DIAGRAM -->
+  <div class="section-card">
+    <div class="section-title">📐 Diagrama Unifilar del Sistema</div>
+    <div class="diagram-wrap" id="diagramWrap"></div>
+  </div>
+
+  <!-- INSTALLATION PHOTOS -->
+  <div class="section-card">
+    <div class="section-title">📸 Instalaciones Realizadas por Voltinela</div>
+    <div class="section-sub" id="photosSubtitle">Fotos de referencia de instalaciones con el sistema recomendado.</div>
+    <div class="photos-grid" id="photosGrid"></div>
+  </div>
+
+  <div style="text-align:center;font-size:.75rem;color:#94a3b8;margin-top:8px;padding:0 16px">
+    * Precios en USD. No incluyen IVA. Sujetos a disponibilidad en stock.<br>
+    Instalación por técnico certificado Voltinela. Diagrama referencial, no reemplaza planos eléctricos certificados.
+  </div>
+
+  <!-- PDF DOWNLOAD -->
+  <div class="pdf-wrap">
+    <button class="pdf-btn" onclick="downloadPDF()">📄 Descargar Propuesta en PDF</button>
+    <div class="pdf-sub">Genera un documento PDF con toda la información del sistema diseñado</div>
+  </div>
+
+</div><!-- /results -->
+</div><!-- /container -->
+
+<script>
+// ── PASSWORD GATE ─────────────────────────────────────────────
+let currentUser = '';
+
+function checkPass(){
+  const user = document.getElementById('userInput').value.trim();
+  const val  = document.getElementById('passInput').value;
+  const err  = document.getElementById('passError');
+  if(!user){
+    err.textContent = '⚠️ Ingresa tu nombre para continuar.';
+    document.getElementById('userInput').focus();
+    return;
+  }
+  if(val === '1111'){
+    currentUser = user;
+    document.getElementById('passGate').style.display='none';
+  } else {
+    err.textContent = '❌ Contraseña incorrecta. Intenta de nuevo.';
+    const inp = document.getElementById('passInput');
+    inp.classList.add('error');
+    inp.value='';
+    setTimeout(()=>inp.classList.remove('error'), 400);
+    inp.focus();
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+// EDITABLE CONSTANTS — actualiza estos precios según tu catálogo
+// ══════════════════════════════════════════════════════════════
+const MATERIALS = {
+  short:  { label:'< 5 metros',    desc:'Cable 4mm, terminales, conectores y accesorios',  price: 85  },
+  medium: { label:'5–10 metros',   desc:'Cable 6mm, terminales, canaleta y accesorios',    price: 165 },
+  long:   { label:'> 10 metros',   desc:'Cable 6mm, canaleta, soportes y accesorios',      price: 280 },
+};
+
+const INSTALL_PRICES = { // precio mano de obra instalación
+  'must-3kva':              180,
+  'must-6kva':              250,
+  'must-15kva':             400,
+  'victron-multiplus-3kva': 220,
+  'victron-multiplus-5kva': 300,
+  'victron-quattro-5kva':   350,
+  'victron-quattro-10kva':  500,
+  'growatt-3kva':           220,
+  'default':                250,
+};
+
+// ── KIT DEFINITIONS ──────────────────────────────────────────
+const KITS = [
+  // 3 kVA — MONOFÁSICA
+  {
+    id:'growatt-3k', range:'3kVA', phases:[1], minKva:0, maxKva:3,
+    name:'Kit G-FORCE Growatt 3000', color:'#81bc00', cardBg:'linear-gradient(135deg,#3a5200 0%,#81bc00 45%,#1a1a1a 80%,#0a0a0a 100%)', textColor:'#fff',
+    badge:'Solar Ready',
+    inverter:{name:'Inversor Growatt SPF 3000TL LVM-ES', desc:'3kW · Baja frecuencia · Split-phase · MPPT solar integrado', price:765},
+    battery:{name:'Batería Growatt AXE 5.0L-C1', desc:'51.2V / 5.0 kWh · LiFePO4 · 6,000 ciclos', price:2050},
+    extras:[{name:'Base AXE 5.0L-C1', price:55},{name:'Cable AXE 5.0L-C1', price:160}],
+    autonomyH:4, note:'Para más de 4h de autonomía, agrega baterías AXE 5.0L-C1 adicionales',
+    installKey:'growatt-3kva', icon:'🟢',
+    photos:['inst-growatt-1','inst-growatt-2','inst-growatt-3'],
+  },
+  // 6 kVA — BIFÁSICA SPLIT-PHASE (2× inversores Growatt)
+  {
+    id:'growatt-6k', range:'6kVA', phases:[2], minKva:0, maxKva:6,
+    name:'Kit G-FORCE Growatt 6000', color:'#81bc00', cardBg:'linear-gradient(135deg,#3a5200 0%,#81bc00 45%,#1a1a1a 80%,#0a0a0a 100%)', textColor:'#fff',
+    badge:'Split-Phase · Solar Ready',
+    inverter:{name:'Inversor Growatt SPF 3000TL LVM-ES', desc:'2× 3kW · Split-phase 120/240V · MPPT solar integrado', price:765, qty:2},
+    battery:{name:'Batería Growatt AXE 5.0L-C1', desc:'51.2V / 5.0 kWh · LiFePO4 · 6,000 ciclos', price:2050},
+    extras:[{name:'Base AXE 5.0L-C1', price:55},{name:'Cable AXE 5.0L-C1', price:160}],
+    autonomyH:4, note:'Para más de 4h de autonomía, agrega baterías AXE 5.0L-C1 adicionales',
+    installKey:'growatt-3kva', icon:'🟢',
+    photos:[],
+  },
+  // 3 kVA — BIFÁSICA
+  {
+    id:'bolt', range:'3kVA', phases:[2], minKva:0, maxKva:3,
+    name:'Kit Bolt', color:'#dc2626', cardBg:'linear-gradient(135deg,#dc2626 0%,#b91c1c 45%,#1a1a1a 80%,#0a0a0a 100%)', textColor:'#fff',
+    badge:'Precio más accesible',
+    inverter:{name:'Inversor Cargador MUST EP33-3024TLV', desc:'3kW · 24V · Baja frecuencia · Split-phase', price:520},
+    battery:{name:'Batería LiFePO4 LP15-24100 · 24V/100Ah', desc:'25.6V / 100Ah / 2.56 kWh · 6,000 ciclos', price:490},
+    extras:[{name:'Cables 4AWG 2 mts (juego)', price:60}],
+    autonomyH:4, note:'Para más de 4h de autonomía, agrega baterías LP15-24100 adicionales',
+    kitPrice:1240, // precio de kit completo directo del catálogo
+    installKey:'must-3kva', icon:'🔴',
+    photos:['inst-bolt-1','inst-bolt-2','inst-bolt-3'],
+  },
+  {
+    id:'voltinela-3k-victron', range:'3kVA', phases:[2], minKva:0, maxKva:3,
+    name:'Kit Voltinela 3000 Victron', color:'#2563eb', cardBg:'linear-gradient(135deg,#1d4ed8 0%,#2563eb 45%,#bfdbfe 80%,#ffffff 100%)', textColor:'#fff',
+    badge:'Alta confiabilidad',
+    inverter:{name:'Inversor MultiPlus-II 48/3000/35-50 Victron', desc:'3kW · 48V · 120V · Cargador 35A · VE.Bus', price:795},
+    battery:{name:'Batería BSL BATT B-LFP48-100E', desc:'51.2V / 100Ah / 5.12 kWh · LiFePO4 · 6,000 ciclos', price:1495},
+    extras:[],
+    autonomyH:4, note:'Para más de 4h de autonomía, agrega baterías BSL BATT 51.2V/100Ah adicionales',
+    installKey:'victron-multiplus-3kva', icon:'🔵',
+    photos:['inst-victron-3k-1','inst-victron-3k-2','inst-victron-3k-3'],
+  },
+  // 5–6 kVA — MONO Y BIFÁSICA
+  {
+    id:'voltinela-6k', range:'5–6kVA', phases:[1,2], minKva:3, maxKva:6,
+    name:'Kit Voltinela 6000', color:'#dc2626', cardBg:'linear-gradient(135deg,#dc2626 0%,#b91c1c 50%,#1a1a1a 80%,#0a0a0a 100%)', textColor:'#fff',
+    badge:'Solar + Red',
+    inverter:{name:'Inversor Solar MUST PV33-6048TLV', desc:'6kW · 48V · Baja frecuencia · MPPT solar integrado', price:860},
+    battery:{name:'Batería LiFePO4 SLP16-48100 MUST', desc:'51.2V / 100Ah / 5.12 kWh · 6,000 ciclos', price:1220},
+    extras:[],
+    autonomyH:4, note:'Para más de 4h de autonomía, agrega baterías SLP16-48100 adicionales',
+    installKey:'must-6kva', icon:'⚡',
+    photos:['inst-must6k-1','inst-must6k-2','inst-must6k-3'],
+  },
+  {
+    id:'voltinela-5k-victron', range:'5–6kVA', phases:[1,2], minKva:3, maxKva:6,
+    name:'Kit Voltinela 5000 Victron', color:'#2563eb', textColor:'#fff',
+    badge:'Premium',
+    inverter:{name:'Inversor MultiPlus-II 48/5000/70-95 Victron', desc:'5kW · 48V · 120V · Cargador 70A · VE.Bus', price:1238},
+    battery:{name:'Batería BSL BATT B-LFP48-100E', desc:'51.2V / 100Ah / 5.12 kWh · LiFePO4 · 6,000 ciclos', price:1495},
+    extras:[],
+    autonomyH:4, note:'Para más de 4h de autonomía, agrega baterías BSL BATT 51.2V/100Ah adicionales',
+    installKey:'victron-multiplus-5kva', icon:'🔵',
+    photos:['inst-victron-5k-1','inst-victron-5k-2','inst-victron-5k-3'],
+  },
+  {
+    id:'voltinela-5k-quattro', range:'5–6kVA', phases:[1,2], minKva:3, maxKva:6,
+    name:'Kit Voltinela 5000 Victron Quattro', color:'#7c3aed', cardBg:'linear-gradient(135deg,#1d4ed8 0%,#3b82f6 50%,#ea580c 80%,#f97316 100%)', textColor:'#fff',
+    badge:'Doble entrada AC',
+    inverter:{name:'Inversor Quattro 48/5000/70-100/100 Victron', desc:'5kW · 48V · Doble entrada AC · Generador + Red', price:2125},
+    battery:{name:'Batería BSL BATT LFP 48V/200Ah', desc:'51.2V / 200Ah / 10.24 kWh · LiFePO4 · 6,000 ciclos', price:2780},
+    extras:[],
+    autonomyH:6, note:'Para más de 6h de autonomía, agrega baterías BSL BATT 51.2V/200Ah adicionales',
+    installKey:'victron-quattro-5kva', icon:'🟣',
+    photos:['inst-quattro5k-1','inst-quattro5k-2','inst-quattro5k-3'],
+  },
+  // 10–15 kVA — MONO Y BIFÁSICA
+  {
+    id:'voltinela-15k', range:'10–15kVA', phases:[1,2], minKva:6, maxKva:15,
+    name:'Kit Voltinela 15000', color:'#dc2626', cardBg:'linear-gradient(135deg,#dc2626 0%,#b91c1c 50%,#1a1a1a 80%,#0a0a0a 100%)', textColor:'#fff',
+    badge:'Alta potencia',
+    inverter:{name:'Inversor Solar MUST PV39-12048TLV', desc:'12kW · 48V · Baja frecuencia · MPPT solar integrado', price:2930},
+    battery:{name:'Batería LiFePO4 SLP16-48200 MUST', desc:'51.2V / 200Ah / 10.24 kWh · 6,000 ciclos · De pared', price:2260},
+    extras:[],
+    autonomyH:4, note:'Para más de 4h de autonomía, agrega baterías de pared MUST SLP16-48200 adicionales',
+    installKey:'must-15kva', icon:'⚡',
+    photos:['inst-15k-1','inst-15k-2','inst-15k-3'],
+  },
+  {
+    id:'voltinela-10k-victron', range:'10–15kVA', phases:[1,2], minKva:6, maxKva:15,
+    name:'Kit Voltinela 10000 Victron', color:'#1d4ed8', cardBg:'linear-gradient(135deg,#1d4ed8 0%,#3b82f6 50%,#ea580c 80%,#f97316 100%)', textColor:'#fff',
+    badge:'Recomendado 10kVA',
+    inverter:{name:'Inversor Quattro 48/10000/140-100/100 Victron', desc:'10kW · 48V · Doble entrada AC · Generador + Red', price:3375},
+    battery:{name:'Batería BSL BATT LFP 48V/200Ah', desc:'51.2V / 200Ah / 10.24 kWh · LiFePO4 · 6,000 ciclos', price:2780},
+    extras:[],
+    autonomyH:4, note:'Para más de 4h de autonomía, agrega baterías BSL BATT 51.2V/200Ah adicionales',
+    installKey:'victron-quattro-10kva', icon:'⚡',
+    photos:['inst-quattro10k-1','inst-quattro10k-2','inst-quattro10k-3'],
+  },
+];
+
+// ── ATS OPTIONS ──────────────────────────────────────────────
+const ATS_OPTIONS = [
+  {model:'ATS 2P × 100A 110VAC Voltinela',    A:100, phases:[1],   price:35},
+  {model:'ATS 4P × 100A 220VAC Voltinela',    A:100, phases:[1,2], price:55},
+  {model:'ATS 4P × 125A 220VAC',              A:125, phases:[1,2], price:93},
+  {model:'ATS Trifásica 4P 100A Voltinela',   A:100, phases:[3],   price:120},
+  {model:'ATS Trifásica 4P 250A Voltinela',   A:250, phases:[3],   price:210},
+];
+
+// ── APPLIANCE DB ──────────────────────────────────────────────
+const APPS = [
+  {id:'led',    cat:'💡 Iluminación',         icon:'💡', name:'Lámpara LED',                 watts:10,   pf:.90, surge:1},
+  {id:'fluo',   cat:'💡 Iluminación',         icon:'🔦', name:'Tubo fluorescente',            watts:40,   pf:.85, surge:1},
+  {id:'laptop', cat:'💻 Computación',         icon:'💻', name:'Laptop / Notebook',            watts:65,   pf:.95, surge:1},
+  {id:'desk',   cat:'💻 Computación',         icon:'🖥️', name:'Computador escritorio',        watts:250,  pf:.90, surge:1},
+  {id:'mon',    cat:'💻 Computación',         icon:'🖥️', name:'Monitor LCD 24"',              watts:25,   pf:.95, surge:1},
+  {id:'print',  cat:'💻 Computación',         icon:'🖨️', name:'Impresora láser',              watts:400,  pf:.90, surge:1},
+  {id:'tv32',   cat:'📺 Entretenimiento',     icon:'📺', name:'Televisor 32"',               watts:60,   pf:.95, surge:1},
+  {id:'tv55',   cat:'📺 Entretenimiento',     icon:'📺', name:'Televisor 55"',               watts:130,  pf:.95, surge:1},
+  {id:'fridge', cat:'🧊 Electrodomésticos',   icon:'🧊', name:'Refrigerador / Nevera',        watts:200,  pf:.85, surge:3},
+  {id:'freez',  cat:'🧊 Electrodomésticos',   icon:'🧊', name:'Congelador',                   watts:300,  pf:.85, surge:3},
+  {id:'micro',  cat:'🧊 Electrodomésticos',   icon:'📦', name:'Microondas',                   watts:1200, pf:.95, surge:1},
+  {id:'wash',   cat:'🧊 Electrodomésticos',   icon:'🫧', name:'Lavadora',                     watts:500,  pf:.85, surge:4},
+  {id:'fan',    cat:'❄️ Climatización',       icon:'🌀', name:'Ventilador de techo',          watts:75,   pf:.85, surge:2},
+  {id:'ac1t',   cat:'❄️ Climatización',       icon:'❄️', name:'Aire acondicionado 1 ton',     watts:1200, pf:.80, surge:3},
+  {id:'ac15t',  cat:'❄️ Climatización',       icon:'❄️', name:'Aire acondicionado 1.5 ton',   watts:1800, pf:.80, surge:3},
+  {id:'ac2t',   cat:'❄️ Climatización',       icon:'❄️', name:'Aire acondicionado 2 ton',     watts:2400, pf:.80, surge:3},
+  {id:'p05',    cat:'💧 Bombas y Motores',    icon:'💧', name:'Bomba de agua ½ HP',          watts:375,  pf:.80, surge:6},
+  {id:'p1',     cat:'💧 Bombas y Motores',    icon:'💧', name:'Bomba de agua 1 HP',           watts:750,  pf:.80, surge:6},
+  {id:'p2',     cat:'💧 Bombas y Motores',    icon:'💧', name:'Bomba de agua 2 HP',           watts:1500, pf:.80, surge:6},
+  {id:'router', cat:'📡 Redes y Seguridad',   icon:'📡', name:'Router / Módem WiFi',          watts:20,   pf:.90, surge:1},
+  {id:'sw',     cat:'📡 Redes y Seguridad',   icon:'🔌', name:'Switch de red',                watts:30,   pf:.90, surge:1},
+  {id:'dvr',    cat:'📡 Redes y Seguridad',   icon:'📷', name:'DVR / NVR de cámaras',         watts:50,   pf:.90, surge:1},
+  {id:'cam',    cat:'📡 Redes y Seguridad',   icon:'📸', name:'Cámara IP (c/u)',              watts:12,   pf:.90, surge:1},
+  {id:'pos',    cat:'🏪 Comercio',            icon:'💰', name:'Terminal POS / Datafono',      watts:30,   pf:.90, surge:1},
+  {id:'cash',   cat:'🏪 Comercio',            icon:'🏪', name:'Caja registradora',            watts:60,   pf:.90, surge:1},
+  {id:'refcom', cat:'🏪 Comercio',            icon:'🥤', name:'Vitrina refrigerada comercial',watts:300,  pf:.85, surge:3},
+  {id:'srv',    cat:'🖧 Servidores',          icon:'🖧', name:'Servidor rack 1U',             watts:400,  pf:.90, surge:1},
+  {id:'nas',    cat:'🖧 Servidores',          icon:'💾', name:'NAS / Storage',                watts:80,   pf:.90, surge:1},
+  {id:'cpap',   cat:'🏥 Médico / Otros',      icon:'🏥', name:'CPAP / Equipo médico pequeño', watts:100,  pf:.90, surge:1},
+  {id:'cent',   cat:'🏥 Médico / Otros',      icon:'🔬', name:'Centrífuga de laboratorio',    watts:800,  pf:.85, surge:5},
+];
+
+// ── PRESETS ───────────────────────────────────────────────────
+const PRESETS = {
+  hogar:   {led:5,tv32:1,fridge:1,router:1,fan:2,   criticals:['fridge','router','led','fan']},
+  oficina: {laptop:4,mon:4,router:1,sw:1,dvr:1,led:8,   criticals:['laptop','mon','router','sw','dvr','led']},
+  comercio:{led:10,pos:3,cash:1,refcom:2,router:1,dvr:1,cam:4, criticals:['pos','cash','refcom','router','dvr','cam','led']},
+  server:  {srv:4,nas:2,sw:2,router:1,cam:4,led:4,   criticals:['srv','nas','sw','router','cam','led']},
+};
+
+// ── PHOTO DATA ────────────────────────────────────────────────
+const KIT_EQUIP_IMGS = {
+  'growatt-3k':          {inv:'assets/equipos/inversor-growatt.png',              bat:'assets/equipos/bateria-growatt-axe-5l.png'},
+  'growatt-6k':          {inv:'assets/equipos/inversor-growatt.png',              bat:'assets/equipos/bateria-growatt-axe-5l.png'},
+  'bolt':                {inv:'assets/equipos/inversor-cargador-must-3kw.png',     bat:'assets/equipos/bateria-must-24100.png'},
+  'voltinela-3k-victron':{inv:'assets/equipos/inversor-victron-multiplus-ii.png', bat:'assets/equipos/bateria-bslbatt.png'},
+  'voltinela-5k-victron':{inv:'assets/equipos/inversor-victron-multiplus-ii.png', bat:'assets/equipos/bateria-bslbatt.png'},
+  'voltinela-5k-quattro':{inv:'assets/equipos/inversor-victron-quattro.png',      bat:'assets/equipos/bateria-bslbatt.png'},
+  'voltinela-6k':        {inv:'assets/equipos/inversor-must-6kw.png',              bat:'assets/equipos/bateria-must-100ah.png'},
+  'voltinela-15k':       {inv:'assets/equipos/inversor-must-15kw.png',             bat:'assets/equipos/bateria-must-100ah.png'},
+  'voltinela-10k-victron':{inv:'assets/equipos/inversor-victron-quattro.png',     bat:'assets/equipos/bateria-bslbatt.png'},
+};
+
+const PHOTO_SETS = {
+  'growatt-3k': [
+    {src:'assets/instalaciones/kit-g-force-6000-1.jpeg', caption:'Kit G-FORCE Growatt · Carabobo'},
+    {src:'assets/instalaciones/kit-g-force-6000-2.jpeg', caption:'Kit G-FORCE Growatt · Caracas'},
+    {src:'assets/instalaciones/kit-g-force-6000-3.jpeg', caption:'Kit G-FORCE Growatt · Aragua'},
+  ],
+  'growatt-6k': [
+    {src:'assets/instalaciones/kit-g-force-6000-1.jpeg', caption:'Kit G-FORCE Growatt 6000 · Carabobo'},
+    {src:'assets/instalaciones/kit-g-force-6000-2.jpeg', caption:'Kit G-FORCE Growatt 6000 · Caracas'},
+    {src:'assets/instalaciones/kit-g-force-6000-3.jpeg', caption:'Kit G-FORCE Growatt 6000 · Aragua'},
+  ],
+  'bolt': [
+    {src:'assets/instalaciones/kit-bolt-1.png', caption:'Kit Bolt instalado · Carabobo'},
+    {src:'assets/instalaciones/kit-bolt-2.png', caption:'Kit Bolt instalado · Caracas'},
+    {src:'assets/instalaciones/kit-bolt-3.png', caption:'Kit Bolt instalado · Aragua'},
+  ],
+  'voltinela-3k-victron': [
+    {src:'assets/instalaciones/kit-voltinela-3000-victron-1.png', caption:'Kit Voltinela 3000 Victron · Carabobo'},
+    {src:'assets/instalaciones/kit-voltinela-3000-victron-2.png', caption:'Kit Voltinela 3000 Victron · Caracas'},
+    {src:'assets/instalaciones/kit-voltinela-3000-victron-3.png', caption:'Kit Voltinela 3000 Victron · Aragua'},
+  ],
+  'voltinela-6k': [
+    {src:'assets/instalaciones/kit-voltinela-6000-1.png', caption:'Kit Voltinela 6000 · Carabobo'},
+    {src:'assets/instalaciones/kit-voltinela-6000-2.png', caption:'Kit Voltinela 6000 · Caracas'},
+    {src:'assets/instalaciones/kit-voltinela-6000-3.png', caption:'Kit Voltinela 6000 · Aragua'},
+  ],
+  'voltinela-5k-victron': [
+    {src:'assets/instalaciones/kit-voltinela-3000-victron-1.png', caption:'Kit Voltinela 5000 Victron · Carabobo'},
+    {src:'assets/instalaciones/kit-voltinela-3000-victron-2.png', caption:'Kit Voltinela 5000 Victron · Caracas'},
+    {src:'assets/instalaciones/kit-voltinela-3000-victron-3.png', caption:'Kit Voltinela 5000 Victron · Aragua'},
+  ],
+  'voltinela-5k-quattro': [
+    {grad:'linear-gradient(135deg,#7c3aed,#6d28d9)', caption:'Quattro 5kVA + BSL BATT 200Ah · Carabobo'},
+    {grad:'linear-gradient(135deg,#a78bfa,#7c3aed)', caption:'Sistema Quattro con generador · Caracas'},
+    {grad:'linear-gradient(135deg,#ddd6fe,#7c3aed)', caption:'Quattro 5kVA doble entrada AC · Aragua'},
+  ],
+  'voltinela-15k': [
+    {src:'assets/instalaciones/kit-voltinela-12000.png',    caption:'Kit Voltinela 15000 · Carabobo'},
+    {src:'assets/instalaciones/kit-voltinela-15000-2.jpg',  caption:'Kit Voltinela 15000 · Caracas'},
+    {src:'assets/instalaciones/kit-voltinela-15000-3.jpg',  caption:'Kit Voltinela 15000 · Aragua'},
+  ],
+  'voltinela-10k-victron': [
+    {src:'assets/instalaciones/kit-voltinela-12000.png', caption:'Kit Voltinela 10000 Victron · Carabobo'},
+    {src:'assets/instalaciones/kit-voltinela-12000.png', caption:'Kit Voltinela 10000 Victron · Caracas'},
+    {src:'assets/instalaciones/kit-voltinela-12000.png', caption:'Kit Voltinela 10000 Victron · Aragua'},
+  ],
+};
+const DEFAULT_PHOTOS = [
+  {grad:'linear-gradient(135deg,#81bc00,#6a9e00)', caption:'Instalación · Carabobo'},
+  {grad:'linear-gradient(135deg,#81bc00,#059669)', caption:'Sistema de respaldo · Caracas'},
+  {grad:'linear-gradient(135deg,#8b5cf6,#7c3aed)', caption:'Solución personalizada · Aragua'},
+];
+
+// ── STATE ─────────────────────────────────────────────────────
+let state = {};
+let activePreset = null;
+let lastResult = null;
+let selectedKitId = null;
+
+// ── RENDER APPLIANCE LIST ──────────────────────────────────────
+function renderAppList(){
+  const cats = [...new Set(APPS.map(a=>a.cat))];
+  let html = '';
+  cats.forEach(cat=>{
+    html += `<div class="cat-label">${cat}</div><div class="appliance-grid">`;
+    APPS.filter(a=>a.cat===cat).forEach(a=>{
+      const s = state[a.id]||{qty:0,critical:false};
+      html += buildAppCard(a,s);
+    });
+    html += '</div>';
+  });
+  document.getElementById('appList').innerHTML = html;
+}
+
+function buildAppCard(a,s){
+  return `<div class="app-card ${s.qty>0?(s.critical?'critical-selected':'selected'):''}" id="card-${a.id}" onclick="toggleApp('${a.id}')">
+    <div class="app-icon">${a.icon}</div>
+    <div class="app-info">
+      <div class="app-name">${a.name}</div>
+      <div class="app-watts">${a.watts}W · FP ${a.pf}${a.surge>1?' · Motor ×'+a.surge:''}</div>
+    </div>
+    <div class="app-controls" onclick="event.stopPropagation()">
+      <input class="qty-input" type="number" min="0" max="99" value="${s.qty||0}"
+        onchange="setQty('${a.id}',+this.value)" id="qty-${a.id}">
+      <button class="critical-toggle ${s.critical?'on':''}" id="crit-${a.id}"
+        onclick="toggleCrit('${a.id}')">
+        ${s.critical?'★ CRÍTICO':'☆ crítico'}
+      </button>
+    </div>
+  </div>`;
+}
+
+function toggleApp(id){
+  if(!state[id]) state[id]={qty:0,critical:false};
+  state[id].qty = state[id].qty>0 ? 0 : 1;
+  document.getElementById('qty-'+id).value = state[id].qty;
+  refreshCard(id);
+  maybeUpdateKits();
+}
+function setQty(id,v){
+  if(!state[id]) state[id]={qty:0,critical:false};
+  state[id].qty = Math.max(0,v);
+  refreshCard(id);
+  maybeUpdateKits();
+}
+function toggleCrit(id){
+  if(!state[id]) state[id]={qty:0,critical:false};
+  if(state[id].qty===0) state[id].qty=1;
+  state[id].critical = !state[id].critical;
+  document.getElementById('qty-'+id).value = state[id].qty;
+  refreshCard(id);
+}
+function refreshCard(id){
+  const s=state[id]||{qty:0,critical:false};
+  const c=document.getElementById('card-'+id);
+  const b=document.getElementById('crit-'+id);
+  if(!c||!b) return;
+  c.className='app-card '+(s.qty>0?(s.critical?'critical-selected':'selected'):'');
+  b.className='critical-toggle '+(s.critical?'on':'');
+  b.textContent=s.critical?'★ CRÍTICO':'☆ crítico';
+}
+
+function applyPreset(name,btn){
+  state={};
+  const p=PRESETS[name];
+  Object.keys(p).forEach(k=>{
+    if(k==='criticals') return;
+    state[k]={qty:p[k],critical:p.criticals.includes(k)};
+  });
+  renderAppList();
+  // Abrir lista al aplicar preset
+  const appListEl = document.getElementById('appList');
+  const toggleBtn = document.getElementById('toggleAppsBtn');
+  appListEl.style.display = 'block';
+  toggleBtn.classList.add('open');
+  document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  activePreset = name;
+  selectedKitId = null;
+  if(name==='hogar' || name==='oficina' || name==='comercio'){
+    document.getElementById('s2').classList.add('active');
+    showKits();
+  } else {
+    document.getElementById('kitSection').style.display='none';
+  }
+}
+
+function toggleAppList(){
+  const list = document.getElementById('appList');
+  const btn  = document.getElementById('toggleAppsBtn');
+  const open = list.style.display !== 'none';
+  list.style.display = open ? 'none' : 'block';
+  btn.classList.toggle('open', !open);
+}
+
+function clearAll(btn){
+  state={};
+  renderAppList();
+  activePreset=null;
+  selectedKitId=null;
+  document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('kitSection').style.display='none';
+}
+
+// ── KIT RECOMMENDATIONS ────────────────────────────────────────
+function getCurrentKva(){
+  const critW = APPS.reduce((s,a)=>{
+    const st=state[a.id];
+    return s+(st&&st.critical&&st.qty>0 ? a.watts*st.qty : 0);
+  },0);
+  return (critW*1.25)/(0.85*1000);
+}
+
+function maybeUpdateKits(){
+  if(activePreset==='hogar') showKits();
+}
+
+// Kits fijos por preset (orden de aparición)
+const PRESET_KITS = {
+  oficina:  ['voltinela-6k','voltinela-5k-victron','voltinela-5k-quattro'],
+  comercio: ['voltinela-15k','voltinela-10k-victron'],
+};
+const PRESET_TITLES = {
+  hogar:   '🏠 Kits Recomendados para Hogar',
+  oficina: '💼 Kits Recomendados para Oficina',
+  comercio:'🏪 Kits Recomendados para Comercio',
+};
+
+function showKits(){
+  const kva = getCurrentKva();
+  const phase = +document.getElementById('cfgPhase').value;
+
+  // Oficina y Comercio: mostrar kits fijos definidos por el preset
+  let display;
+  if(PRESET_KITS[activePreset]){
+    display = PRESET_KITS[activePreset].map(id=> KITS.find(k=>k.id===id)).filter(Boolean);
+  } else {
+    // Hogar: auto-selección por kVA y fase — siempre respeta la fase seleccionada
+    const applicable = KITS.filter(k=>
+      kva >= k.minKva && kva < k.maxKva && (k.phases.includes(phase)||k.phases.includes(0))
+    );
+    display = applicable.length>0 ? applicable : KITS.filter(k=>k.maxKva<=3 && (k.phases.includes(phase)||k.phases.includes(0)));
+  }
+
+  document.getElementById('kitTitle').textContent = PRESET_TITLES[activePreset] || '🎁 Kits Recomendados';
+  document.getElementById('kitSubtitle').textContent =
+    activePreset==='hogar'
+      ? `Carga crítica estimada: ${kva.toFixed(1)} kVA · Kits disponibles para tu consumo`
+      : `Selecciona el kit que mejor se adapte a tu presupuesto y necesidades`;
+
+  let html='';
+  display.forEach(k=>{
+    const invQtyCard = k.inverter.qty||1;
+    const total = k.kitPrice || (k.inverter.price*invQtyCard + k.battery.price + (k.extras||[]).reduce((s,e)=>s+e.price,0));
+    html+=`<div class="kit-card" onclick="selectKit('${k.id}')">
+      <div class="kit-card-head" style="background:${k.cardBg||k.color}">
+        <div class="kit-badge">${k.badge}</div>
+        <div class="kit-name">${k.icon} ${k.name}</div>
+        <div class="kit-range">Para sistemas de ${k.range}</div>
+      </div>
+      <div class="kit-body">
+        <div class="kit-item">
+          <span class="kit-item-icon">⚡</span>
+          <span class="kit-item-text"><strong>${k.inverter.qty>1?k.inverter.qty+'× ':''}${k.inverter.name}</strong><br>${k.inverter.desc}</span>
+        </div>
+        <div class="kit-item">
+          <span class="kit-item-icon">🔋</span>
+          <span class="kit-item-text"><strong>${k.battery.name}</strong><br>${k.battery.desc}</span>
+        </div>
+        ${(k.extras||[]).map(e=>`<div class="kit-item"><span class="kit-item-icon">📦</span><span class="kit-item-text">${e.name}</span></div>`).join('')}
+        <div class="kit-price">${k.icon} $${total.toLocaleString()} <span>USD (sin IVA)</span></div>
+        <div class="kit-note">⏱ ${k.note}</div>
+      </div>
+    </div>`;
+  });
+  document.getElementById('kitsGrid').innerHTML=html;
+  document.getElementById('kitSection').style.display='block';
+}
+
+function selectKit(id){
+  selectedKitId = id;
+  document.querySelectorAll('.kit-card').forEach(c=>{
+    c.style.border='2px solid #e0e0e0';
+    c.style.background='#fff';
+    const badge = c.querySelector('.kit-badge');
+    if(badge && badge.textContent.startsWith('✓ ')) badge.textContent = badge.textContent.slice(2);
+  });
+  const selected = document.querySelector(`[onclick="selectKit('${id}')"]`);
+  if(selected){
+    selected.style.border='3px solid #81bc00';
+    selected.style.background='#f5fce8';
+    const badge = selected.querySelector('.kit-badge');
+    if(badge && !badge.textContent.startsWith('✓ ')) badge.textContent = '✓ ' + badge.textContent;
+  }
+}
+
+function updateInstallNote(){
+  const el=document.getElementById('installNote');
+  el.style.display=document.getElementById('cfgInstall').checked?'block':'none';
+}
+
+// ── CALCULATION ───────────────────────────────────────────────
+function calculate(){
+  const allSel=APPS.filter(a=>state[a.id]&&state[a.id].qty>0);
+  if(!allSel.length){ alert('Selecciona al menos un equipo.'); return; }
+
+  let critList=APPS.filter(a=>state[a.id]&&state[a.id].critical&&state[a.id].qty>0);
+  if(!critList.length){
+    if(!confirm('No hay cargas críticas marcadas. ¿Respaldar todos los equipos seleccionados?')) return;
+    allSel.forEach(a=>{ state[a.id].critical=true; });
+    critList=[...allSel];
+  }
+
+  const phase   = +document.getElementById('cfgPhase').value;
+  const autoH   = +document.getElementById('cfgAuto').value;
+  const solar   = document.getElementById('cfgSolar').value==='yes';
+  const distKey = document.getElementById('cfgDist').value;
+  const wantInst= document.getElementById('cfgInstall').checked;
+
+  let totalW=0, critW=0;
+  allSel.forEach(a=>{ totalW+=a.watts*state[a.id].qty; });
+  critList.forEach(a=>{ critW+=a.watts*state[a.id].qty; });
+
+  const designW   = critW*1.25;
+  const designKVA = designW/0.85/1000;
+
+  // Select matching kit
+  // Usar el kit que el usuario seleccionó explícitamente; si no hay selección, auto-seleccionar
+  let matchKit = null;
+  if(selectedKitId){
+    // Si el usuario seleccionó un kit explícitamente, usarlo siempre sin restricción de rango
+    matchKit = KITS.find(k=> k.id===selectedKitId);
+  }
+  if(!matchKit){
+    matchKit = KITS.find(k=>
+      designKVA>=k.minKva && designKVA<k.maxKva && (k.phases.includes(phase)||k.phases.length>1)
+    ) || KITS[KITS.length-1];
+  }
+
+  // Battery sizing — slider: 4h=1bat, 8h=2bat, 12h=3bat, 16h=4bat
+  const batKwh = matchKit.battery.price<=1500 ? 5.12 : 10.24;
+  const usablePerBat = batKwh*0.80*0.92;
+  const energyNeeded = critW*autoH/1000; // kWh (usado en cálculos detallados)
+  const batQty = Math.round(autoH/4); // directo del slider
+  const bankKwh = batKwh*batQty;
+  const realAutoH = (bankKwh*0.80*0.92*1000)/critW;
+
+  // ATS
+  const critA=critW/(phase===1?120:phase===2?240:208)*1.25;
+  const ats=ATS_OPTIONS.find(a=>a.phases.includes(phase)&&a.A>=critA)||ATS_OPTIONS[3];
+
+  // Materials
+  const mat=MATERIALS[distKey];
+
+  // Install price
+  const installPrice=INSTALL_PRICES[matchKit.installKey]||INSTALL_PRICES['default'];
+
+  // BOM
+  const bom=[];
+  const invQty = matchKit.inverter.qty||1;
+  const kitBasePrice = matchKit.kitPrice || (matchKit.inverter.price*invQty+matchKit.battery.price+(matchKit.extras||[]).reduce((s,e)=>s+e.price,0));
+  bom.push({model:matchKit.inverter.name, desc:matchKit.inverter.desc, qty:invQty, unit:matchKit.inverter.price, total:invQty*matchKit.inverter.price, tag:'main'});
+  bom.push({model:matchKit.battery.name,  desc:matchKit.battery.desc,  qty:batQty, unit:matchKit.battery.price, total:batQty*matchKit.battery.price, tag:'main'});
+  (matchKit.extras||[]).forEach(e=>{
+    bom.push({model:e.name,desc:'Accesorio del kit',qty:1,unit:e.price,total:e.price,tag:'acc'});
+  });
+  bom.push({model:ats.model, desc:`Transferencia automática ${ats.A}A · ${ats.phases.length>1?'Bifásica':'Monofásica'}`, qty:1, unit:ats.price, total:ats.price, tag:'ats'});
+
+  const subEquip = bom.reduce((s,b)=>s+b.total,0);
+  const matPrice = mat.price;
+  let installCost=0;
+  if(wantInst){ installCost=installPrice; }
+  const grandTotal = subEquip+matPrice+installCost;
+
+  lastResult={matchKit,critW,totalW,designKVA,autoH,batQty,bankKwh,realAutoH,
+    energyNeeded,phase,solar,bom,ats,mat,matPrice,wantInst,installCost,grandTotal,installPrice};
+
+  renderResults(lastResult);
+  document.getElementById('results').style.display='block';
+  document.getElementById('results').scrollIntoView({behavior:'smooth'});
+  ['s2','s3','s4'].forEach(id=>{
+    document.getElementById(id).classList.add('done','active');
+  });
+}
+
+// ── RENDER RESULTS ─────────────────────────────────────────────
+function renderResults(r){
+  const k=r.matchKit;
+  const brand = k.name.includes('Victron')?'Victron Energy':
+               k.name.includes('Growatt')?'Growatt':
+               k.name.includes('Bolt')||k.name.includes('MUST')||k.name.includes('Voltinela 6')||k.name.includes('Voltinela 15')?'MUST / Voltinela':'Voltinela';
+
+  // Banner
+  const bannerClass = (k.id==='bolt'||k.id==='voltinela-15k'||k.id==='voltinela-6k')? 'brand-bolt':
+                      k.name.includes('Victron')? 'brand-victron':
+                      k.name.includes('Growatt')? 'brand-growatt': 'brand-must';
+  document.getElementById('brandBanner').innerHTML=`
+    <div class="brand-banner ${bannerClass}">
+      <div class="b-icon">${k.icon}</div>
+      <div>
+        <h2>${k.name} — ${(r.designKVA).toFixed(1)} kVA · ${r.batQty} batería${r.batQty>1?'s':''} · ${r.bankKwh.toFixed(1)} kWh</h2>
+        <p>Sistema seleccionado para carga crítica de ${Math.round(r.critW)}W · Autonomía real: ${r.realAutoH.toFixed(1)} horas · ${r.phase===1?'Monofásico':r.phase===2?'Bifásico':'Trifásico'}</p>
+      </div>
+    </div>`;
+
+  // Alerts
+  let alerts='';
+  if(r.realAutoH>=r.autoH*0.9)
+    alerts+=`<div class="alert alert-ok">✅ El banco cubre la autonomía de ${r.autoH}h (autonomía real: ${r.realAutoH.toFixed(1)}h @ ${Math.round(r.critW)}W)</div>`;
+  else
+    alerts+=`<div class="alert alert-err">⚠️ Con ${r.batQty} batería${r.batQty>1?'s':''} la autonomía es ${r.realAutoH.toFixed(1)}h. Para llegar a ${r.autoH}h necesitas ${Math.ceil(r.critW*r.autoH/(r.bankKwh/r.batQty*0.80*0.92*1000))} baterías.</div>`;
+  document.getElementById('alerts').innerHTML=alerts;
+
+  // KPIs
+  document.getElementById('kpiGrid').innerHTML=`
+    <div class="kpi blue"><div class="kpi-val">${Math.round(r.critW)}W</div><div class="kpi-label">Carga crítica</div></div>
+    <div class="kpi amber"><div class="kpi-val">${Math.round(r.totalW)}W</div><div class="kpi-label">Carga total</div></div>
+    <div class="kpi purple"><div class="kpi-val">${r.designKVA.toFixed(1)} kVA</div><div class="kpi-label">Diseño (×1.25)</div></div>
+    <div class="kpi green"><div class="kpi-val">${r.bankKwh.toFixed(1)} kWh</div><div class="kpi-label">Banco baterías</div></div>
+    <div class="kpi teal"><div class="kpi-val">${r.realAutoH.toFixed(1)}h</div><div class="kpi-label">Autonomía real</div></div>
+    <div class="kpi gray"><div class="kpi-val">$${r.grandTotal.toLocaleString()}</div><div class="kpi-label">Total presupuesto</div></div>`;
+
+  // BOM TABLE
+  let rows='';
+  r.bom.forEach(b=>{
+    const tags={main:'tag-main',acc:'tag-acc',ats:'tag-ats'};
+    const labs={main:'Principal',acc:'Accesorio',ats:'Transferencia'};
+    rows+=`<tr><td><strong>${b.model}</strong><br><span style="font-size:.74rem;color:#64748b">${b.desc}</span><br><span class="tag ${tags[b.tag]}">${labs[b.tag]}</span></td>
+      <td style="text-align:center">${b.qty}</td>
+      <td>$${b.unit.toLocaleString()}</td>
+      <td><strong>$${b.total.toLocaleString()}</strong></td></tr>`;
+  });
+  // Materials row
+  rows+=`<tr class="mat-row"><td><strong>📏 Materiales Eléctricos</strong><br><span style="font-size:.74rem">${r.mat.desc} (${r.mat.label})</span><br><span class="tag tag-mat">Materiales</span></td>
+    <td style="text-align:center">1</td><td>$${r.mat.price}</td><td><strong>$${r.mat.price}</strong></td></tr>`;
+  // Install row
+  if(r.wantInst){
+    rows+=`<tr class="install-row"><td><strong>🔧 Instalación por técnico Voltinela</strong><br><span style="font-size:.74rem">Instalación, puesta en marcha y configuración del sistema</span><br><span class="tag tag-inst">Instalación</span></td>
+      <td style="text-align:center">1</td><td>$${r.installPrice}</td><td><strong>$${r.installCost}</strong></td></tr>`;
+  }
+  rows+=`<tr class="total-row"><td colspan="3"><strong>💰 TOTAL PRESUPUESTO (sin IVA)</strong></td><td><strong>$${r.grandTotal.toLocaleString()}</strong></td></tr>`;
+  document.getElementById('equipBody').innerHTML=rows;
+
+  // CALCS
+  const critListNames = APPS.filter(a=>state[a.id]&&state[a.id].critical&&state[a.id].qty>0)
+    .map(a=>`${state[a.id].qty}×${a.watts}W`).join('+');
+  document.getElementById('calcDetail').innerHTML=`
+    <strong>1. Carga crítica</strong><br>
+    <span class="formula">${critListNames} = ${Math.round(r.critW)}W</span>
+    <br><br><strong>2. Potencia de diseño (×1.25 seguridad)</strong><br>
+    <span class="formula">${Math.round(r.critW)} × 1.25 / 0.85 FP = ${r.designKVA.toFixed(2)} kVA</span>
+    <br><span class="result-line">→ Kit seleccionado: ${k.name}</span>
+    <br><br><strong>3. Energía requerida</strong><br>
+    <span class="formula">${Math.round(r.critW)}W × ${r.autoH}h = ${Math.round(r.critW*r.autoH)} Wh = ${r.energyNeeded.toFixed(2)} kWh</span>
+    <br><br><strong>4. Baterías necesarias</strong><br>
+    <span class="formula">Útil/bat = ${(r.bankKwh/r.batQty).toFixed(2)}kWh × 0.80 × 0.92 = ${(r.bankKwh/r.batQty*0.80*0.92).toFixed(2)} kWh</span><br>
+    <span class="formula">Baterías = ⌈${r.energyNeeded.toFixed(2)} / ${(r.bankKwh/r.batQty*0.80*0.92).toFixed(2)}⌉ = ${r.batQty}</span>
+    <br><br><strong>5. Autonomía real</strong><br>
+    <span class="formula">(${r.bankKwh.toFixed(2)}kWh × 0.80 × 0.92 × 1000) / ${Math.round(r.critW)}W</span>
+    <br><span class="result-line">→ <strong>${r.realAutoH.toFixed(2)} horas</strong></span>
+    <br><br><strong>6. Corriente DC @ 48V</strong><br>
+    <span class="formula">${Math.round(r.critW)}W / (48V × 0.92η) = ${(r.critW/(48*0.92)).toFixed(1)} A</span>`;
+
+  updateSim();
+  renderProducts(r);
+  renderDiagram(r);
+  renderPhotos(r);
+}
+
+// ── SIMULATOR ─────────────────────────────────────────────────
+function updateSim(){
+  if(!lastResult) return;
+  const pct=+document.getElementById('simLoad').value;
+  document.getElementById('simPct').textContent=pct+'%';
+  const w=Math.round(lastResult.critW*pct/100);
+  const h=w>0?(lastResult.bankKwh*0.80*0.92*1000/w):999;
+  const a=w>0?(w/(48*0.92)).toFixed(1):'0';
+  document.getElementById('simW').textContent=w+'W';
+  document.getElementById('simH').textContent=h>99?'+99h':h.toFixed(1)+'h';
+  document.getElementById('simA').textContent=a+'A';
+}
+
+// ── PRODUCT VISUAL CARDS ──────────────────────────────────────
+function renderProducts(r){
+  const k=r.matchKit;
+  const col=k.color;
+  const equipImgs=KIT_EQUIP_IMGS[k.id]||{};
+  const products=[
+    {
+      icon:'⚡', bg:col, label:'INVERSOR/CARGADOR', brand:'Principal',
+      img: equipImgs.inv||null,
+      name:k.inverter.name,
+      model:k.inverter.desc,
+      specs:`Potencia: ${r.designKVA.toFixed(1)} kVA design\nFase: ${r.phase===1?'Monofásico':r.phase===2?'Bifásico':'Trifásico'}`,
+      price:'$'+k.inverter.price.toLocaleString(),
+    },
+    {
+      icon:'🔋', bg:'#1e293b', label:'BATERÍA LiFePO4', brand:'Banco',
+      img: equipImgs.bat||null,
+      name:k.battery.name,
+      model:k.battery.desc,
+      specs:`Cantidad: ${r.batQty} unidad${r.batQty>1?'es':''}\nTotal: ${r.bankKwh.toFixed(1)} kWh banco`,
+      price:'$'+(k.battery.price*r.batQty).toLocaleString(),
+    },
+    {
+      icon:'🔀', bg:'#92400e', label:'TRANSFERENCIA ATS', brand:'Protección',
+      name:r.ats.model,
+      model:`${r.ats.A}A · ${r.ats.phases.length>1?'Bifásica':'Monofásica'} · Automática`,
+      specs:`Corriente diseño: ${(r.critW/(r.phase===1?120:240)*1.25).toFixed(0)}A\nConmutación automática`,
+      price:'$'+r.ats.price.toLocaleString(),
+    },
+    {
+      icon:'📏', bg:'#475569', label:'MATERIALES', brand:'Instalación',
+      name:'Kit de Materiales Eléctricos',
+      model:r.mat.desc,
+      specs:`Distancia: ${r.mat.label}\nCable, terminales y accesorios`,
+      price:'$'+r.mat.price,
+    },
+  ];
+  if(r.wantInst){
+    products.push({
+      icon:'🔧', bg:'#059669', label:'INSTALACIÓN', brand:'Servicio',
+      name:'Instalación por técnico Voltinela',
+      model:'Puesta en marcha y configuración',
+      specs:`Incluye: instalación, pruebas\ny capacitación al usuario`,
+      price:'$'+r.installPrice,
+    });
+  }
+
+  document.getElementById('productsGrid').innerHTML=products.map(p=>`
+    <div class="prod-card">
+      <div class="prod-card-img" style="background:${p.img?'#f1f5f9':p.bg}">
+        ${p.img
+          ? `<img src="${p.img}" alt="${p.name}" style="max-height:110px;max-width:90%;object-fit:contain">`
+          : `<span style="font-size:3.5rem">${p.icon}</span>`}
+        <span class="prod-brand-tag" style="background:${p.img?p.bg:'rgba(0,0,0,.4)'};color:#fff">${p.brand}</span>
+      </div>
+      <div class="prod-card-body">
+        <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:${p.bg};margin-bottom:4px">${p.label}</div>
+        <div class="prod-card-name">${p.name}</div>
+        <div class="prod-card-model">${p.model}</div>
+        <div class="prod-card-spec" style="white-space:pre-line">${p.specs}</div>
+        <div class="prod-card-price">${p.price}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ── SYSTEM DIAGRAM ─────────────────────────────────────────────
+function renderDiagram(r){
+  const k=r.matchKit;
+  const col=k.color;
+  const phaseLabel=r.phase===1?'120V':r.phase===2?'120/240V':'208/480V';
+  const dImgs=KIT_EQUIP_IMGS[k.id]||{};
+
+  const invQty = k.inverter.qty||1;
+  const svg=`<svg class="diagram" viewBox="0 0 420 810" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#475569"/>
+    </marker>
+    <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="${col}"/>
+    </marker>
+    <marker id="arrG" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#81bc00"/>
+    </marker>
+    <clipPath id="clipInv"><rect x="22" y="196" width="376" height="188" rx="10"/></clipPath>
+    <clipPath id="clipBat"><rect x="22" y="408" width="376" height="172" rx="10"/></clipPath>
+  </defs>
+  <rect width="420" height="810" fill="#f7f7f7" rx="12"/>
+
+  <!-- RED ELÉCTRICA -->
+  <rect x="120" y="14" width="180" height="64" rx="10" fill="#e0e0e0" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="210" y="36" text-anchor="middle" font-size="10" font-weight="700" fill="#374151">🏭 Red Eléctrica</text>
+  <text x="210" y="51" text-anchor="middle" font-size="9" fill="#64748b">${phaseLabel} AC</text>
+  <text x="210" y="65" text-anchor="middle" font-size="8" fill="#94a3b8">Servicio público</text>
+
+  <line x1="210" y1="78" x2="210" y2="104" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- ATS -->
+  <rect x="120" y="106" width="180" height="68" rx="10" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="210" y="128" text-anchor="middle" font-size="10" font-weight="700" fill="#92400e">🔀 ATS / Transferencia</text>
+  <text x="210" y="143" text-anchor="middle" font-size="8.5" fill="#78350f">${r.ats.model.split(' ').slice(0,4).join(' ')}</text>
+  <text x="210" y="157" text-anchor="middle" font-size="8" fill="#92400e">${r.ats.A}A · Automático · $${r.ats.price}</text>
+
+  <!-- bypass dashed (ATS → lado Inversor) -->
+  <path d="M300,140 Q390,140 390,196" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3" fill="none"/>
+
+  <line x1="210" y1="174" x2="210" y2="194" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- INVERSOR — imagen arriba, texto abajo -->
+  <rect x="22" y="196" width="376" height="188" rx="10" fill="${col}" stroke="${col}" stroke-width="2" opacity="0.55"/>
+  ${dImgs.inv
+    ? `<image href="${dImgs.inv}" x="24" y="198" width="372" height="94" preserveAspectRatio="xMidYMid meet" clip-path="url(#clipInv)" opacity="1"/>`
+    : `<text x="210" y="254" text-anchor="middle" font-size="44">⚡</text>`}
+  <rect x="22" y="292" width="376" height="92" rx="0" fill="${col}" opacity="0.90"/>
+  <line x1="22" y1="292" x2="398" y2="292" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+  <text x="210" y="311" text-anchor="middle" font-size="11.5" font-weight="800" fill="#fff">${k.icon} ${k.name}</text>
+  <text x="210" y="326" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,.9)">${k.inverter.desc.split('·').slice(0,3).join(' · ')}</text>
+  <text x="210" y="340" text-anchor="middle" font-size="8" fill="rgba(255,255,255,.8)">${r.phase===1?'Monofásico':r.phase===2?'Split-phase 120/240V':'Trifásico'}${invQty>1?' · '+invQty+'× inversores':''}</text>
+  <text x="210" y="353" text-anchor="middle" font-size="8" fill="rgba(255,255,255,.75)">💲$${(k.inverter.price*invQty).toLocaleString()} · Inversor/Cargador</text>
+  <text x="210" y="366" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,.6)">$${r.grandTotal.toLocaleString()} total sistema</text>
+
+  <!-- DC Line Inversor → Baterías -->
+  <line x1="210" y1="384" x2="210" y2="406" stroke="${col}" stroke-width="2.5" marker-end="url(#arr2)"/>
+  <text x="225" y="398" font-size="8.5" fill="${col}" font-weight="700">DC 48V</text>
+
+  <!-- BATERÍAS — imagen arriba, texto abajo -->
+  <rect x="22" y="408" width="376" height="172" rx="10" fill="#1e293b" stroke="#334155" stroke-width="1.5" opacity="0.55"/>
+  ${dImgs.bat
+    ? `<image href="${dImgs.bat}" x="24" y="410" width="372" height="86" preserveAspectRatio="xMidYMid meet" clip-path="url(#clipBat)" opacity="1"/>`
+    : `<text x="210" y="460" text-anchor="middle" font-size="38">🔋</text>`}
+  <rect x="22" y="496" width="376" height="84" rx="0" fill="#1e293b" opacity="0.90"/>
+  <line x1="22" y1="496" x2="398" y2="496" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+  <text x="210" y="514" text-anchor="middle" font-size="11" font-weight="700" fill="#e0e0e0">🔋 Banco de Baterías</text>
+  <text x="210" y="528" text-anchor="middle" font-size="8.5" fill="#94a3b8">${k.battery.name.split(' ').slice(0,6).join(' ')}</text>
+  <text x="210" y="541" text-anchor="middle" font-size="8" fill="#64748b">${r.batQty} unid · ${r.bankKwh.toFixed(1)} kWh · LiFePO4</text>
+  <text x="210" y="554" text-anchor="middle" font-size="8.5" fill="#81bc00">✓ Autonomía: ${r.realAutoH.toFixed(1)} h</text>
+  <text x="210" y="567" text-anchor="middle" font-size="8" fill="#475569">💲$${(k.battery.price*r.batQty).toLocaleString()}</text>
+
+  <!-- Line Baterías → Panel Crítico -->
+  <line x1="210" y1="580" x2="210" y2="606" stroke="#81bc00" stroke-width="2" marker-end="url(#arrG)"/>
+
+  <!-- PANEL CRÍTICO -->
+  <rect x="110" y="608" width="200" height="96" rx="10" fill="#f0fdf4" stroke="#81bc00" stroke-width="1.5"/>
+  <text x="210" y="632" text-anchor="middle" font-size="10.5" font-weight="700" fill="#065f46">🔌 Panel Crítico</text>
+  <text x="210" y="647" text-anchor="middle" font-size="9" fill="#047857">${Math.round(r.critW)}W · ${APPS.filter(a=>state[a.id]&&state[a.id].critical&&state[a.id].qty>0).length} circuitos respaldados</text>
+  <text x="210" y="661" text-anchor="middle" font-size="8" fill="#81bc00">✓ Sin cortes · 24/7</text>
+  <text x="210" y="675" text-anchor="middle" font-size="7.5" fill="#94a3b8">Cargas críticas respaldadas</text>
+  <text x="210" y="689" text-anchor="middle" font-size="7.5" fill="#81bc00">✓ Voltinela</text>
+
+  ${r.solar?`
+  <!-- SOLAR (futuro) -->
+  <rect x="22" y="608" width="82" height="60" rx="8" fill="#fef9c3" stroke="#eab308" stroke-width="1.5"/>
+  <text x="63" y="628" text-anchor="middle" font-size="9" font-weight="700" fill="#713f12">☀️ Solar</text>
+  <text x="63" y="641" text-anchor="middle" font-size="7.5" fill="#78350f">Futuro · MPPT</text>
+  <text x="63" y="654" text-anchor="middle" font-size="7" fill="#92400e">Listo para expandir</text>
+  <line x1="104" y1="638" x2="110" y2="650" stroke="#eab308" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+  `:''}
+
+  <!-- LEGEND -->
+  <rect x="16" y="720" width="388" height="78" rx="8" fill="white" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="28" y="739" font-size="9" fill="#374151" font-weight="700">LEYENDA</text>
+  <line x1="88" y1="736" x2="112" y2="736" stroke="#475569" stroke-width="2"/>
+  <text x="116" y="739" font-size="7.5" fill="#475569">Flujo AC</text>
+  <line x1="162" y1="736" x2="186" y2="736" stroke="${col}" stroke-width="2.5"/>
+  <text x="190" y="739" font-size="7.5" fill="${col}">Flujo DC 48V</text>
+  <line x1="258" y1="736" x2="282" y2="736" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="286" y="739" font-size="7.5" fill="#94a3b8">Bypass</text>
+  <text x="28" y="754" font-size="7" fill="#64748b">${k.name} · ${r.phase===1?'Monofásico':r.phase===2?'Bifásico':'Trifásico'} · 48V LiFePO4 · ${r.realAutoH.toFixed(1)}h autonomía</text>
+  <text x="28" y="767" font-size="6.5" fill="#94a3b8">Diagrama referencial — instalación por técnico electricista certificado · Voltinela ©</text>
+  <text x="28" y="780" font-size="6.5" fill="#94a3b8">Total: $${r.grandTotal.toLocaleString()} USD sin IVA (equipos + materiales${r.wantInst?' + instalación':''})</text>
+</svg>`;
+  document.getElementById('diagramWrap').innerHTML=svg;
+}
+
+// ── INSTALLATION PHOTOS ───────────────────────────────────────
+function renderPhotos(r){
+  const k=r.matchKit;
+  const photos = PHOTO_SETS[k.id] || DEFAULT_PHOTOS;
+  document.getElementById('photosSubtitle').textContent =
+    `Instalaciones reales con ${k.name} realizadas por el equipo técnico de Voltinela`;
+
+  const html = photos.map((p,i)=>`
+    <div class="photo-card">
+      ${p.src ? `
+      <div class="photo-placeholder" style="background:#000;overflow:hidden;position:relative">
+        <img src="${p.src}" alt="${p.caption}" style="width:360px;height:640px;object-fit:cover;object-position:center;display:block">
+        <div class="photo-label-overlay">${p.caption}</div>
+      </div>` : `
+      <div class="photo-placeholder" style="background:${p.grad}">
+        <span class="photo-icon">📷</span>
+        <div style="font-size:.7rem;color:rgba(255,255,255,.7);text-align:center;padding:0 8px">Foto de instalación Voltinela</div>
+        <div class="photo-label-overlay">${p.caption}</div>
+      </div>`}
+      <div class="photo-caption">📍 ${p.caption}</div>
+    </div>`).join('');
+
+  document.getElementById('photosGrid').innerHTML=html;
+}
+
+// ── PDF DOWNLOAD ──────────────────────────────────────────────
+function downloadPDF(){
+  if(!lastResult){ alert('Primero calcula el sistema para generar el PDF.'); return; }
+
+  // Equipos críticos seleccionados
+  const critItems = APPS.filter(a=> state[a.id] && state[a.id].critical && state[a.id].qty>0);
+  const critRowsHTML = critItems.length
+    ? critItems.map(a=>{
+        const qty = state[a.id].qty;
+        const w   = a.watts * qty;
+        return `<tr>
+          <td style="padding:5px 10px;border-bottom:1px solid #e0e0e0">${a.icon} ${a.name}</td>
+          <td style="padding:5px 10px;border-bottom:1px solid #e0e0e0;text-align:center">${qty}</td>
+          <td style="padding:5px 10px;border-bottom:1px solid #e0e0e0;text-align:right;font-weight:600">${w}W</td>
+        </tr>`;
+      }).join('')
+    : `<tr><td colspan="3" style="padding:8px 10px;color:#94a3b8;font-style:italic">No se marcaron cargas críticas</td></tr>`;
+
+  const pdfNote = document.createElement('div');
+  pdfNote.id='pdf-header-extra';
+  pdfNote.style.cssText='display:none';
+  pdfNote.innerHTML=`
+  <div style="background:linear-gradient(135deg,#eef8d0,#d9f0a0);border-radius:10px;padding:14px 20px;margin-bottom:14px;border-left:5px solid #81bc00;border:1px solid #c5e060">
+    <div style="font-size:1rem;font-weight:800;color:#3a5200;margin-bottom:4px">📋 Propuesta Técnica de Respaldo Energético</div>
+    <div style="font-size:.8rem;color:#374151">Generada el <strong>${new Date().toLocaleDateString('es-VE',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</strong></div>
+    <div style="margin-top:4px;font-size:.82rem">Kit: <strong>${lastResult.matchKit.name}</strong> &nbsp;·&nbsp; Presupuesto: <strong>$${lastResult.grandTotal.toLocaleString()} USD</strong> sin IVA</div>
+    <div style="margin-top:3px;font-size:.75rem;color:#64748b">Voltinela Eco Energy &nbsp;·&nbsp; cesarsilvar01@gmail.com</div>
+    <div style="margin-top:5px;font-size:.78rem;color:#3a5200;font-weight:700">👤 Cotización realizada por: ${currentUser}</div>
+  </div>
+  <div style="border:1px solid #e0e0e0;border-radius:10px;overflow:hidden;margin-bottom:14px">
+    <div style="background:#1e293b;color:#fff;padding:9px 14px;display:flex;align-items:center;gap:8px">
+      <span style="font-size:1rem">⚡</span>
+      <span style="font-weight:800;font-size:.88rem">Equipos Críticos a Respaldar</span>
+      <span style="margin-left:auto;font-size:.75rem;background:#81bc00;color:#fff;padding:2px 8px;border-radius:10px">${critItems.length} equipos · ${Math.round(lastResult.critW)}W total</span>
+    </div>
+    <table style="width:100%;border-collapse:collapse;font-size:.8rem">
+      <thead>
+        <tr style="background:#f7f7f7">
+          <th style="padding:6px 10px;text-align:left;color:#374151;border-bottom:2px solid #e0e0e0">Equipo</th>
+          <th style="padding:6px 10px;text-align:center;color:#374151;border-bottom:2px solid #e0e0e0">Cant.</th>
+          <th style="padding:6px 10px;text-align:right;color:#374151;border-bottom:2px solid #e0e0e0">Potencia</th>
+        </tr>
+      </thead>
+      <tbody>${critRowsHTML}</tbody>
+      <tfoot>
+        <tr style="background:#eef8d0">
+          <td colspan="2" style="padding:7px 10px;font-weight:800;color:#3a5200;border-top:2px solid #81bc00">Total carga crítica</td>
+          <td style="padding:7px 10px;font-weight:800;color:#3a5200;text-align:right;border-top:2px solid #81bc00">${Math.round(lastResult.critW)}W</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>`;
+
+  document.querySelector('.container').prepend(pdfNote);
+  pdfNote.style.display='block';
+  document.getElementById('backCoverUser').textContent = currentUser ? '👤 Cotización realizada por: ' + currentUser : '';
+  window.print();
+  setTimeout(()=>pdfNote.remove(), 1000);
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+renderAppList();
+</script>
+
+<!-- ══ CONTRAPORTADA PDF ══ -->
+<div class="pdf-back-cover">
+  <img src="assets/logo-voltinela-vertical.png" alt="Voltinela Eco Energy" onerror="this.src='assets/logo-horizontal-letras-grises.png'">
+  <div class="back-line"></div>
+  <div class="back-tagline">Seguridad energética en todo momento.</div>
+  <div class="back-sub">Sistemas UPS · Inversores · Baterías LiFePO4 · MUST · Victron Energy · Growatt</div>
+  <div class="back-sub" style="margin-top:6px">cesarsilvar01@gmail.com · Voltinela Eco Energy ©</div>
+  <div class="back-sub" style="margin-top:14px;font-weight:700;color:#3a5200" id="backCoverUser"></div>
+</div>
+
+</body>
+</html>
